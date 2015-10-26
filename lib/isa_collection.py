@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import namedtuple
 import re
+import os
 
 ISA_DOCUMENT_ID_PATTERN = re.compile("^doc_id:(?P<document_id>.*)$")
 ISA_WORD_PATTERN = re.compile("{Str: (?P<name>.*) Weight: (?P<weight>[\d\.]+) Id: (?P<id>.*)}")
@@ -101,7 +102,7 @@ def get_isa_collection_filepathes(root_folder, collection_name):
             yield os.path.join(dirname, filename)
 
 
-def transform_isa_collection_to_vopal_wabbit(output_stream):
+def transform_isa_collection_to_vopal_wabbit(filepathes, output_stream):
     for filepath in filepathes:
         with open(filepath) as document_stream:
             isa_document = parse_isa_document(document_stream)

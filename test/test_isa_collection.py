@@ -5,6 +5,13 @@ import pytest
 from isa_collection import (
     parse_isa_dictionary, ISAWord,
     _parse_document_id, parse_isa_document, ISADocument,
+    get_isa_collection_filepathes,
+)
+
+ISA_ROOT_FOLDER = "/home/emy/data"
+system_test = pytest.mark.skipif(
+    "ISA_ROOT_FOLDER" not in locals(),
+    reason="ISA collecton should be downloaded",
 )
 
 TEST_ISA_DOCUMENT = """\
@@ -53,3 +60,15 @@ def test_parse_isa_document():
         ],
     )
     assert isa_document == expected_document
+
+
+@system_test
+@pytest.mark.parametrize(
+    "collection_name, file_count",
+    [
+        ("cyber_len_collection", 495101),
+        ("cluster_eval_coll", 65892), 
+    ],
+)
+def test_count_documents_in_collection(collection_name, file_count):
+    assert len(list(get_isa_collection_filepathes(ISA_ROOT_FOLDER, collection_name))) == file_count
